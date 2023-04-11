@@ -15,10 +15,12 @@ data class DeviceDetails(
     val frontCamera: String?,
     val backCamera: String?,
     val price: Double?,
-    val imgUrl: String?
+    val imgUrl: String?,
+    val rating: Int?,
+    val reviews: Int?
 )
 
-fun getDevices(): MutableList<DeviceDetails>{
+fun getDevices(): MutableList<DeviceDetails> {
     return mutableListOf(
         DeviceDetails(
             deviceName = "OnePlus 11",
@@ -37,7 +39,9 @@ fun getDevices(): MutableList<DeviceDetails>{
 32 MP, f/2.0, 48mm (telephoto), 1/2.74", PDAF, 2x optical zoom
 48 MP, f/2.2, 115˚, (ultrawide), 1/2.0", AF""",
             price = 792.68,
-            imgUrl = "https://fdn2.gsmarena.com/vv/bigpic/oneplus-11.jpg"
+            imgUrl = "https://fdn2.gsmarena.com/vv/bigpic/oneplus-11.jpg",
+            rating = 4,
+            reviews = 159
         ),
         DeviceDetails(
             deviceName = "OnePlus 10 Pro",
@@ -56,7 +60,9 @@ fun getDevices(): MutableList<DeviceDetails>{
 8 MP, f/2.4, 77mm (telephoto), 1.0µm, PDAF, OIS, 3.3x optical zoom
 50 MP, f/2.2, 14mm, 150˚ (ultrawide), 1/2.76", 0.64µm""",
             price = 731.70,
-            imgUrl = "https://fdn2.gsmarena.com/vv/bigpic/oneplus-10-pro.jpg"
+            imgUrl = "https://fdn2.gsmarena.com/vv/bigpic/oneplus-10-pro.jpg",
+            rating = 3,
+            reviews = 371
         ),
         DeviceDetails(
             deviceName = "OnePlus 10R",
@@ -68,14 +74,16 @@ fun getDevices(): MutableList<DeviceDetails>{
             glassProtection = "Glass front (Gorilla Glass 5), plastic frame, plastic back",
             display = "Fluid AMOLED, 1B colors, 120Hz, HDR10+",
             displayResolution = "1080 x 2412 pixels, 20:9 ratio (~394 ppi density)",
-            displayBrightness = 0,
+            displayBrightness = null,
             battery = "Li-Po 5000 mAh, non-removable",
             frontCamera = "16 MP, f/2.4, 26mm (wide), 1/3.09\", 1.0µm",
             backCamera = """50 MP, f/1.8, 24mm (wide), 1/1.56", 1.0µm, PDAF, OIS
 8 MP, f/2.2, 15mm, 120˚ (ultrawide), 1/4.0", 1.12µm
 2 MP, f/2.4, (macro)""",
             price = 487.80,
-            imgUrl = "https://fdn2.gsmarena.com/vv/bigpic/oneplus-10r.jpg"
+            imgUrl = "https://fdn2.gsmarena.com/vv/bigpic/oneplus-10r.jpg",
+            rating = 2,
+            reviews = 420
         ),
         DeviceDetails(
             deviceName = "Apple iPhone 13",
@@ -93,7 +101,9 @@ fun getDevices(): MutableList<DeviceDetails>{
             backCamera = """12 MP, f/1.6, 26mm (wide), 1.7µm, dual pixel PDAF, sensor-shift OIS
 12 MP, f/2.4, 120˚, 13mm (ultrawide)""",
             price = 902.43,
-            imgUrl = "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-13.jpg"
+            imgUrl = "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-13.jpg",
+            rating = 5,
+            reviews = 223
         ),
         DeviceDetails(
             deviceName = "Apple iPhone 14",
@@ -111,13 +121,15 @@ fun getDevices(): MutableList<DeviceDetails>{
             backCamera = """12 MP, f/1.5, 26mm (wide), 1/1.7", 1.9µm, dual pixel PDAF, sensor-shift OIS
 12 MP, f/2.4, 13mm, 120˚ (ultrawide)""",
             price = 1297.56,
-            imgUrl = "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14.jpg"
+            imgUrl = "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14.jpg",
+            rating = 0,
+            reviews = 994
         )
     )
 }
 
-fun getValueFromAttributeName(deviceDetails: DeviceDetails, attr: String): String?{
-    return when(attr){
+fun getValueFromAttributeName(deviceDetails: DeviceDetails, attr: String): String? {
+    return when (attr) {
         "deviceName" -> deviceDetails.deviceName
         "launchDate" -> deviceDetails.launchDate
         "networkTech" -> deviceDetails.networkTech
@@ -127,7 +139,12 @@ fun getValueFromAttributeName(deviceDetails: DeviceDetails, attr: String): Strin
         "glassProtection" -> deviceDetails.glassProtection
         "display" -> deviceDetails.display
         "displayResolution" -> deviceDetails.displayResolution
-        "displayBrightness" -> "${deviceDetails.displayBrightness} nits"
+        "displayBrightness" -> {
+            if (deviceDetails.displayBrightness != null)
+                "${deviceDetails.displayBrightness} nits"
+            else
+                "-"
+        }
         "battery" -> deviceDetails.battery
         "frontCamera" -> deviceDetails.frontCamera
         "backCamera" -> deviceDetails.backCamera
@@ -136,13 +153,13 @@ fun getValueFromAttributeName(deviceDetails: DeviceDetails, attr: String): Strin
 }
 
 fun getAttrsList(): List<String> = listOf(
-    "launchDate","networkTech","weight","screenSize","chipset",
-    "glassProtection","display","displayResolution","displayBrightness","battery",
-    "frontCamera","backCamera"
+    "rating", "launchDate", "networkTech", "weight", "screenSize", "chipset",
+    "glassProtection", "display", "displayResolution", "displayBrightness", "battery",
+    "frontCamera", "backCamera"
 )
 
-fun getAttrDisplayNameFromAttr(attr: String): String{
-    return when(attr){
+fun getAttrDisplayNameFromAttr(attr: String): String {
+    return when (attr) {
         "launchDate" -> "Launch Date"
         "networkTech" -> "Network"
         "weight" -> "Weight"
@@ -155,6 +172,7 @@ fun getAttrDisplayNameFromAttr(attr: String): String{
         "battery" -> "Battery"
         "frontCamera" -> "Selfie Camera"
         "backCamera" -> "Main Camera"
+        "rating" -> "Rating"
         else -> ""
     }
 }

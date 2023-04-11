@@ -169,15 +169,25 @@ fun ItemsCompareComposable(modifier: Modifier) {
                             devices.forEach { device ->
                                 Column(modifier = Modifier.width(128.dp)) {
                                     Divider(thickness = 1.dp, color = tableBorder)
-                                    Text(
-                                        text = getValueFromAttributeName(device, attr)!!,
-                                        color = textColorPrimary,
-                                        fontSize = 13.sp,
-                                        fontWeight = FontWeight(weight = 400),
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 12.dp, vertical = 12.dp)
-                                    )
+                                    if (attr == "rating") {
+                                        RatingBar(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 8.dp, vertical = 12.dp),
+                                            ratingValue = device.rating!!,
+                                            reviewCount = device.reviews!!
+                                        )
+                                    } else {
+                                        Text(
+                                            text = getValueFromAttributeName(device, attr)!!,
+                                            color = textColorPrimary,
+                                            fontSize = 13.sp,
+                                            fontWeight = FontWeight(weight = 400),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 12.dp, vertical = 12.dp)
+                                        )
+                                    }
                                 }
                                 VerticalDivider(height)
                             }

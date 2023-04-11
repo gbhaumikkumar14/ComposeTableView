@@ -12,10 +12,12 @@ val Grey200 = Color(0xFFACACAC)
 val Grey500 = Color(0xFF7E7E7E)
 val Grey700 = Color(0xFF4E4E4E)
 
-val TableBackGround = Color(0xFFF7F7F7)
-val TableBorder = Color(0xFFDCD6CB)
-val TablePrimary = Color(0xFFFFFFFF)
-val TableSecondary = Color(0xFFF4F2ED)
+val tableBackGround = Color(0xFFF7F7F7)
+val tableBorder = Color(0xFFDCD6CB)
+val tableCellColorPrimary = Color(0xFFFFFFFF)
+val tableCellColorSecondary = Color(0xFFF4F2ED)
 
 val textColorEmphasis = Color(0xE5030301)
 val textColorPrimary = Color(0xBF0C0B08)
+
+val colorBorderButtonSecondaryRest = Color(0xFF928B80)

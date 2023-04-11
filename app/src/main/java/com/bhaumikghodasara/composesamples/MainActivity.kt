@@ -21,12 +21,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MySampleApp(){
+private fun MySampleApp() {
     ComposeSamplesTheme {
         Scaffold(topBar = {
-            TopAppBar(title = {Text(text = "Compose Sample")})
-        }) {
-            paddingValues -> ItemsCompareComposable(modifier = Modifier.padding(paddingValues))
+            TopAppBar(title = { Text(text = "Compose Sample") })
+        }) { paddingValues ->
+            ItemsCompareComposable(modifier = Modifier.padding(paddingValues))
         }
     }
 }

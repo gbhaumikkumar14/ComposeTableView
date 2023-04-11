@@ -26,22 +26,25 @@ import com.bhaumikghodasara.composesamples.ui.theme.*
 fun ItemHeader(
     devices: SnapshotStateList<DeviceDetails>,
     deviceDetails: DeviceDetails,
-    onDelete: () -> Unit){
+    onDelete: () -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier.width(125.dp)
+        modifier = Modifier.width(128.dp)
     ) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-        ){
-            AsyncImage(model = deviceDetails.imgUrl,
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            AsyncImage(
+                model = deviceDetails.imgUrl,
                 contentDescription = "",
                 modifier = Modifier
                     .height(100.dp)
                     .align(Alignment.Center)
-                    .padding(top = 8.dp)
+                    .padding(top = 8.dp, end = 8.dp)
             )
-            if(devices.size > 2){
+            if (devices.size > 2) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_close_24),
                     contentDescription = "",
@@ -73,10 +76,11 @@ fun ItemHeader(
         )
         OutlinedButton(
             onClick = {},
-            border = BorderStroke(width = 2.dp, color = TableBorder),
+            border = BorderStroke(width = 2.dp, color = colorBorderButtonSecondaryRest),
             modifier = Modifier.padding(start = 12.dp, top = 8.dp, bottom = 8.dp)
         ) {
-            Text(text = "Shop now",
+            Text(
+                text = "Shop now",
                 fontSize = 12.sp,
                 fontWeight = FontWeight(weight = 510),
                 color = textColorPrimary,
@@ -87,7 +91,7 @@ fun ItemHeader(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ItemsCompareComposable(modifier: Modifier){
+fun ItemsCompareComposable(modifier: Modifier) {
     val deviceList = getDevices()
     val devices = remember { mutableStateListOf(*deviceList.toTypedArray()) }
     val attrs = getAttrsList()
@@ -102,16 +106,18 @@ fun ItemsCompareComposable(modifier: Modifier){
             Row(
                 Modifier
                     .onSizeChanged { headerheight = it.height }
-                    .background(TableBackGround)
+                    .background(tableBackGround)
             ) {
-                Text(text = "", modifier = Modifier
-                    .width(105.dp)
-                    .height(height = with(LocalDensity.current) { headerheight.toDp() }))
+                Text(
+                    text = "", modifier = Modifier
+                        .width(104.dp)
+                        .height(height = with(LocalDensity.current) { headerheight.toDp() })
+                )
                 VerticalDivider(height = headerheight)
                 Row(
                     modifier = Modifier
                         .horizontalScroll(horizontal)
-                        .background(TablePrimary)
+                        .background(tableCellColorPrimary)
                 ) {
                     devices.forEach {
                         ItemHeader(devices = devices, deviceDetails = it) {
@@ -131,17 +137,17 @@ fun ItemsCompareComposable(modifier: Modifier){
                         modifier = Modifier
                             .then(
                                 if (count % 2 == 0) {
-                                    Modifier.background(TablePrimary)
+                                    Modifier.background(tableCellColorPrimary)
                                 } else {
-                                    Modifier.background(TableSecondary)
+                                    Modifier.background(tableCellColorSecondary)
                                 }
                             )
                     ) {
                         var height by remember {
                             mutableStateOf(0)
                         }
-                        Column(modifier = Modifier.width(105.dp)) {
-                            Divider(thickness = 1.dp, color = TableBorder)
+                        Column(modifier = Modifier.width(104.dp)) {
+                            Divider(thickness = 1.dp, color = tableBorder)
                             Text(
                                 text = getAttrDisplayNameFromAttr(attr),
                                 fontSize = 13.sp,
@@ -161,8 +167,8 @@ fun ItemsCompareComposable(modifier: Modifier){
                                 .horizontalScroll(horizontal)
                         ) {
                             devices.forEach { device ->
-                                Column(modifier = Modifier.width(125.dp)) {
-                                    Divider(thickness = 1.dp, color = TableBorder)
+                                Column(modifier = Modifier.width(128.dp)) {
+                                    Divider(thickness = 1.dp, color = tableBorder)
                                     Text(
                                         text = getValueFromAttributeName(device, attr)!!,
                                         color = textColorPrimary,
@@ -184,24 +190,9 @@ fun ItemsCompareComposable(modifier: Modifier){
     }
 }
 
-@Composable
-fun VerticalDivider(height: Int?){
-    Divider(
-        color = TableBorder,
-        modifier = Modifier
-            .then(
-                if (height != null)
-                    Modifier.height(height = with(LocalDensity.current) { height.toDp() })
-                else
-                    Modifier.fillMaxHeight()
-            )
-            .width(1.dp)
-    )
-}
-
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun PreviewItemsCompareComposable(){
+fun PreviewItemsCompareComposable() {
     ComposeSamplesTheme {
         ItemsCompareComposable(Modifier)
     }

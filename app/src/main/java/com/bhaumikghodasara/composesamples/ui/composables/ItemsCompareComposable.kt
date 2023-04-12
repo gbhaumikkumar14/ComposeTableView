@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,13 +23,22 @@ import com.bhaumikghodasara.composesamples.model.*
 import com.bhaumikghodasara.composesamples.ui.theme.*
 import com.bhaumikghodasara.composesamples.ui.viewmodel.CompareItemsViewModel
 
+/**
+ * Below improvement can be added for actual implementation
+ *
+ * 1. Width for cells can be computed programmatically as per device screen width
+ * 2. dimensions can be converted to constants
+ * 3. Font Weight can be converted to constants
+ * 4. For different view types we can create function with attribute name to return content
+ */
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ItemsCompareComposable(modifier: Modifier, viewModel: CompareItemsViewModel = viewModel()) {
     val devices by viewModel.devices.collectAsStateWithLifecycle()
     val attrs = getAttrsList()
-    val vertical = rememberScrollState()
-    val horizontal = rememberScrollState()
+    val verticalScrollState = rememberScrollState()
+    val horizontalScrollState = rememberScrollState()
     // This will stop over scroll effect
     CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
         Column(modifier = modifier) {
@@ -44,13 +52,13 @@ fun ItemsCompareComposable(modifier: Modifier, viewModel: CompareItemsViewModel 
             ) {
                 Text(
                     text = "", modifier = Modifier
-                        .width(104.dp)
+                        .width(dimen104)
                         .height(height = with(LocalDensity.current) { headerheight.toDp() })
                 )
                 VerticalDivider(height = headerheight)
                 Row(
                     modifier = Modifier
-                        .horizontalScroll(horizontal)
+                        .horizontalScroll(horizontalScrollState)
                         .background(tableCellColorPrimary)
                 ) {
                     devices.forEach {
@@ -63,7 +71,7 @@ fun ItemsCompareComposable(modifier: Modifier, viewModel: CompareItemsViewModel 
             }
             Column(
                 modifier = Modifier
-                    .verticalScroll(vertical)
+                    .verticalScroll(verticalScrollState)
             ) {
                 var count = 0
                 attrs.forEach { attr ->
@@ -80,8 +88,8 @@ fun ItemsCompareComposable(modifier: Modifier, viewModel: CompareItemsViewModel 
                         var height by remember {
                             mutableStateOf(0)
                         }
-                        Column(modifier = Modifier.width(104.dp)) {
-                            Divider(thickness = 1.dp, color = tableBorder)
+                        Column(modifier = Modifier.width(dimen104)) {
+                            Divider(thickness = dimen1, color = tableBorder)
                             Text(
                                 text = getAttrDisplayNameFromAttr(attr),
                                 fontSize = 13.sp,
@@ -89,7 +97,7 @@ fun ItemsCompareComposable(modifier: Modifier, viewModel: CompareItemsViewModel 
                                 fontWeight = FontWeight(weight = 510),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                                    .padding(horizontal = dimen16, vertical = dimen12)
                             )
                         }
                         VerticalDivider(height = height)
@@ -98,16 +106,16 @@ fun ItemsCompareComposable(modifier: Modifier, viewModel: CompareItemsViewModel 
                                 .onSizeChanged {
                                     height = it.height
                                 }
-                                .horizontalScroll(horizontal)
+                                .horizontalScroll(horizontalScrollState)
                         ) {
                             devices.forEach { device ->
-                                Column(modifier = Modifier.width(128.dp)) {
-                                    Divider(thickness = 1.dp, color = tableBorder)
+                                Column(modifier = Modifier.width(dimen128)) {
+                                    Divider(thickness = dimen1, color = tableBorder)
                                     if (attr == "rating") {
                                         RatingBar(
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .padding(horizontal = 8.dp, vertical = 12.dp),
+                                                .padding(horizontal = dimen8, vertical = dimen12),
                                             ratingValue = device.rating!!,
                                             reviewCount = device.reviews!!
                                         )
@@ -119,7 +127,7 @@ fun ItemsCompareComposable(modifier: Modifier, viewModel: CompareItemsViewModel 
                                             fontWeight = FontWeight(weight = 400),
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .padding(horizontal = 12.dp, vertical = 12.dp)
+                                                .padding(dimen12)
                                         )
                                     }
                                 }
@@ -142,7 +150,7 @@ fun ItemHeader(
 ) {
     Column(
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier.width(128.dp)
+        modifier = Modifier.width(dimen128)
     ) {
         Box(
             modifier = Modifier
@@ -150,11 +158,11 @@ fun ItemHeader(
         ) {
             AsyncImage(
                 model = deviceDetails.imgUrl,
-                contentDescription = "",
+                contentDescription = "Item image",
                 modifier = Modifier
-                    .height(100.dp)
+                    .height(dimen100)
                     .align(Alignment.Center)
-                    .padding(top = 8.dp, end = 8.dp)
+                    .padding(top = dimen8, end = dimen8)
             )
             if (devices.size > 2) {
                 Icon(
@@ -175,7 +183,7 @@ fun ItemHeader(
             fontWeight = FontWeight(weight = 500),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp, top = 4.dp)
+                .padding(start = dimen12, end = dimen12, top = dimen4)
         )
         Text(
             text = "$${deviceDetails.price}",
@@ -184,12 +192,12 @@ fun ItemHeader(
             fontWeight = FontWeight(weight = 400),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 4.dp)
+                .padding(horizontal = dimen12, vertical = dimen4)
         )
         OutlinedButton(
             onClick = {},
-            border = BorderStroke(width = 2.dp, color = colorBorderButtonSecondaryRest),
-            modifier = Modifier.padding(start = 12.dp, top = 8.dp, bottom = 8.dp)
+            border = BorderStroke(width = dimen2, color = colorBorderButtonSecondaryRest),
+            modifier = Modifier.padding(start = dimen12, top = dimen8, bottom = dimen8)
         ) {
             Text(
                 text = "Shop now",

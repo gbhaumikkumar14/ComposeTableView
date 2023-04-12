@@ -20,8 +20,8 @@ data class DeviceDetails(
     val reviews: Int?
 )
 
-fun getDevices(): MutableList<DeviceDetails> {
-    return mutableListOf(
+fun getDevices(): List<DeviceDetails> {
+    return listOf(
         DeviceDetails(
             deviceName = "OnePlus 11",
             launchDate = "2023, January 04",

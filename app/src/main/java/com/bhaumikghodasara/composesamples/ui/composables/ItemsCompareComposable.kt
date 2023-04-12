@@ -7,7 +7,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
@@ -17,83 +16,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.bhaumikghodasara.composesamples.R
 import com.bhaumikghodasara.composesamples.model.*
 import com.bhaumikghodasara.composesamples.ui.theme.*
-
-@Composable
-fun ItemHeader(
-    devices: SnapshotStateList<DeviceDetails>,
-    deviceDetails: DeviceDetails,
-    onDelete: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-        modifier = Modifier.width(128.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            AsyncImage(
-                model = deviceDetails.imgUrl,
-                contentDescription = "",
-                modifier = Modifier
-                    .height(100.dp)
-                    .align(Alignment.Center)
-                    .padding(top = 8.dp, end = 8.dp)
-            )
-            if (devices.size > 2) {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_close_24),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .clickable {
-                            onDelete()
-                        }
-                )
-            }
-        }
-        Text(
-            text = deviceDetails.deviceName!!,
-            color = textColorEmphasis,
-            fontSize = 13.sp,
-            fontWeight = FontWeight(weight = 500),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp, top = 4.dp)
-        )
-        Text(
-            text = "$${deviceDetails.price}",
-            color = textColorEmphasis,
-            fontSize = 12.sp,
-            fontWeight = FontWeight(weight = 400),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 4.dp)
-        )
-        OutlinedButton(
-            onClick = {},
-            border = BorderStroke(width = 2.dp, color = colorBorderButtonSecondaryRest),
-            modifier = Modifier.padding(start = 12.dp, top = 8.dp, bottom = 8.dp)
-        ) {
-            Text(
-                text = "Shop now",
-                fontSize = 12.sp,
-                fontWeight = FontWeight(weight = 510),
-                color = textColorPrimary,
-            )
-        }
-    }
-}
+import com.bhaumikghodasara.composesamples.ui.viewmodel.CompareItemsViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ItemsCompareComposable(modifier: Modifier) {
-    val deviceList = getDevices()
-    val devices = remember { mutableStateListOf(*deviceList.toTypedArray()) }
+fun ItemsCompareComposable(modifier: Modifier, viewModel: CompareItemsViewModel = viewModel()) {
+    val devices by viewModel.devices.collectAsStateWithLifecycle()
     val attrs = getAttrsList()
     val vertical = rememberScrollState()
     val horizontal = rememberScrollState()
@@ -121,7 +55,7 @@ fun ItemsCompareComposable(modifier: Modifier) {
                 ) {
                     devices.forEach {
                         ItemHeader(devices = devices, deviceDetails = it) {
-                            devices.remove(it)
+                            viewModel.removeDevice(it)
                         }
                         VerticalDivider(height = headerheight)
                     }
@@ -196,6 +130,73 @@ fun ItemsCompareComposable(modifier: Modifier) {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ItemHeader(
+    devices: List<DeviceDetails>,
+    deviceDetails: DeviceDetails,
+    onDelete: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier.width(128.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            AsyncImage(
+                model = deviceDetails.imgUrl,
+                contentDescription = "",
+                modifier = Modifier
+                    .height(100.dp)
+                    .align(Alignment.Center)
+                    .padding(top = 8.dp, end = 8.dp)
+            )
+            if (devices.size > 2) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_close_24),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .clickable {
+                            onDelete()
+                        }
+                )
+            }
+        }
+        Text(
+            text = deviceDetails.deviceName!!,
+            color = textColorEmphasis,
+            fontSize = 13.sp,
+            fontWeight = FontWeight(weight = 500),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 12.dp, end = 12.dp, top = 4.dp)
+        )
+        Text(
+            text = "$${deviceDetails.price}",
+            color = textColorEmphasis,
+            fontSize = 12.sp,
+            fontWeight = FontWeight(weight = 400),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 4.dp)
+        )
+        OutlinedButton(
+            onClick = {},
+            border = BorderStroke(width = 2.dp, color = colorBorderButtonSecondaryRest),
+            modifier = Modifier.padding(start = 12.dp, top = 8.dp, bottom = 8.dp)
+        ) {
+            Text(
+                text = "Shop now",
+                fontSize = 12.sp,
+                fontWeight = FontWeight(weight = 510),
+                color = textColorPrimary,
+            )
         }
     }
 }

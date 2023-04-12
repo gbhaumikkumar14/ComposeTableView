@@ -8,7 +8,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
@@ -18,14 +17,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.bhaumikghodasara.composesamples.R
 import com.bhaumikghodasara.composesamples.model.*
 import com.bhaumikghodasara.composesamples.ui.theme.*
+import com.bhaumikghodasara.composesamples.ui.viewmodel.CompareItemsViewModel
 
 @Composable
 fun ItemHeaderLazy(
-    devices: MutableList<DeviceDetails>,
+    devices: List<DeviceDetails>,
     deviceDetails: DeviceDetails,
     onDelete: () -> Unit
 ) {
@@ -92,9 +93,10 @@ fun ItemHeaderLazy(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ItemsCompareComposableLazy(modifier: Modifier) {
-    val devices = getDevices()
+fun ItemsCompareComposableLazy(modifier: Modifier, viewModel: CompareItemsViewModel = viewModel()) {
+    val devices = getDevices().toMutableList()
     // todo NOTE :  below line causing issue for multiple scroll
+//    val devices by viewModel.devices.collectAsStateWithLifecycle()
 //    val devices = remember { mutableStateListOf(*deviceList.toTypedArray()) }
     val attrs = getAttrsList()
     val horizontal = rememberLazyListState()
@@ -124,7 +126,7 @@ fun ItemsCompareComposableLazy(modifier: Modifier) {
                 ) {
                     items(devices) {
                         ItemHeaderLazy(devices = devices, deviceDetails = it) {
-                            devices.remove(it)
+                            viewModel.removeDevice(it)
                         }
                         VerticalDivider(height = headerHeight)
                     }

@@ -27,32 +27,25 @@ import com.bhaumikghodasara.composesamples.model.*
 import com.bhaumikghodasara.composesamples.ui.theme.*
 import com.bhaumikghodasara.composesamples.ui.viewmodel.CompareItemsViewModel
 
-/**
- * Below improvement can be added for actual implementation
- *
- * 1. Width for cells can be computed programmatically as per device screen width
- * 2. dimensions can be converted to constants
- * 3. Font Weight can be converted to constants
- * 4. For different view types we can create function with attribute name to return content
- */
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ItemsCompareComposable(
     modifier: Modifier,
     viewModel: CompareItemsViewModel = viewModel(),
-    isLoading: Boolean = true
+    isLoading: Boolean = false
 ) {
     val devices by viewModel.devices.collectAsStateWithLifecycle()
-    val attrs = getAttrsList()
+    val attrs by viewModel.attrs.collectAsStateWithLifecycle()
+
     val verticalScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
-
-    val itemHeaderWidth = screenWidth * 35 / 100
-    val attrHeaderWidth = screenWidth * 28 / 100
+    // Percentage of full width given to each item columns
+    val itemHeaderWidth = screenWidth * 33 / 100
+    // Percentage of full width given to attrs column
+    val attrHeaderWidth = screenWidth * 26 / 100
 
     if (isLoading) {
         Column {
